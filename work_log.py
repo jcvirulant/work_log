@@ -11,60 +11,32 @@ fieldnames = [
             ]
 
 
-def task_info():
-    fmt = ('%m-%d-%y')
-    task_name = input('What is the task name? ')
-    time_spent = input('How mush time was spent? ')
-    if input('Was the task done today?') == 'y':
-        date = datetime.date.today()
-        date = date.strftime(fmt)
-    else:
-        date = input('What is the task date? (MM-DD-YY) ')
-    notes = input('Notes (hit enter to skip)? ')
-    my_list = [first_name, last_name, task_name, time_spent, notes, date]
-    my_dict = {
-            'first_name': first_name,
-            'last_name': last_name,
-            'task_name': task_name,
-            'time_spent': time_spent,
-            'notes': notes,
-            'date': date
-            }
-    return my_dict
+class Log:
+    def __init__(self):
+        print('Welcome to...\n\nTASK LOG 3000!!!!!\n\n')
+        self.first_name = input("What is your first name? ")
+        self.last_name = input("What is your last name? ")
+        sf()
 
+    def menu():
+        ask = input('Would you like to [S]earch,'
+                    ' [N]ew task, or [Q]uit? '.lower())
+        if ask == 's':
+            search = Search()
+        elif ask == 'n':
+            wtf()
+        else:
+            print('Thank you for using Task Log 3000!')
+            sys.exit()
 
-def menu():
-    ask = input('Would you like to [S]earch, [N]ew task, or [Q]uit? '.lower())
-    if ask == 's':
-        search = Search()
-    elif ask == 'n':
-        wtf()
-    else:
-        print('Thank you for using Task Log 3000!')
-        sys.exit()
+    def sf():  # sf = start_file
+        try:
+            csvfile = open("work_log.csv", 'x')
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+        except FileExistsError:
+            pass
 
-
-def sf():  # sf = start_file
-    try:
-        csvfile = open("work_log.csv", 'x')
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-    except FileExistsError:
-        pass
-
-
-def wtf():  # wtf = write to file
-    csvfile = open("work_log.csv", 'a')
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writerow(task_info())
-    csvfile.close()
-
-
-print('Welcome to...\n\nTASK LOG 3000!!!!!\n\n')
-my_dict = {}
-first_name = input("What is your first name? ")
-last_name = input("What is your last name? ")
-sf()
 
 while True:
     menu()
