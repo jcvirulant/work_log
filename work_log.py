@@ -1,18 +1,26 @@
 import csv
 import datetime
+import time
 import sys
 from log_search import Search
 
 # Must format all inputs --> date task name, duration, etc.
 
 fieldnames = [
-            'first_name', 'last_name', 'task_name',
-            'time_spent', 'notes', 'date'
+            'task_num',
+            'first_name',
+            'last_name',
+            'task_name',
+            'time_spent',
+            'notes',
+            'date'
             ]
 
+base = 1487198145  # posix number taken at time of creation
 
 def task_info():
     fmt = ('%m-%d-%y')
+    task_num = int(time.time())
     task_name = input('What is the task name? ')
     time_spent = input('How mush time was spent? ')
     if input('Was the task done today?') == 'y':
@@ -21,8 +29,8 @@ def task_info():
     else:
         date = input('What is the task date? (MM-DD-YY) ')
     notes = input('Notes (hit enter to skip)? ')
-    my_list = [first_name, last_name, task_name, time_spent, notes, date]
     my_dict = {
+            'task_num': task_num,
             'first_name': first_name,
             'last_name': last_name,
             'task_name': task_name,
@@ -34,7 +42,8 @@ def task_info():
 
 
 def menu():
-    ask = input('Would you like to [S]earch, [N]ew task, or [Q]uit? '.lower())
+    ask = input('Would you like to [S]earch, '
+                '[N]ew task, or [Q]uit? '.lower())
     if ask == 's':
         search = Search()
     elif ask == 'n':
