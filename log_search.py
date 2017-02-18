@@ -2,6 +2,7 @@ import re
 import csv
 import time
 
+
 class Search:
     fmt = ('%m-%d-%y')
 
@@ -10,41 +11,41 @@ class Search:
         self.print_task(self.row_num)
         self.menu()
 
-    def menu(self):
-        menu_select = input('[P]revious, [N]ext, Search by [D]ate,'
+    def search_menu(self):
+        menu_select = input('Search by [D]ate, date [R]ange'
                             ' or Search by [T]ask name? ').lower()
-        if menu_select == 'p':
-            self.row_num -= 1
-            self.print_task(self.row_num)
-        elif menu_select == 'n':
-            self.row_num += 1
-            self.print_task(self.row_num)
         elif menu_select == 'd':
             self.rff('date')
+        elif menu_select == 'r':
+            pass
         else:
             self.rff('task_name')
 
-    def rff(self, fieldname):  # rff = read from file
-        count = 0
-        csvfile = open('work_log.csv', 'r')
-        search = input('What {} would you like to search?'.format(fieldname))
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            if search in row[str(fieldname)]:
-                count += 1
-                print(
-                    '\n\nFirst Name: ' + row['first_name'] + '\n'
-                    'Last Name: ' + row['last_name'] + '\n'
-                    'Task: ' + row['task_name'] + '\n'
-                    'Duration: ' + row['time_spent'] + '\n'
-                    'Notes: ' + row['notes'] + '\n'
-                    'Date: ' + row['date'] + '\n'
-                    )
-                print('_' * 50)
-        if count == 0:
-            print('No results found')
-        if input('\n\nSearch again? Y/n').lower() == 'y':
-            Search()
+        def date_search(self):
+
+
+
+    # def rff(self, fieldname):  # rff = read from file
+    #     count = 0
+    #     csvfile = open('work_log.csv', 'r')
+    #     search = input('What {} would you like to search?'.format(fieldname))
+    #     reader = csv.DictReader(csvfile)
+    #     for row in reader:
+    #         if search in row[str(fieldname)]:
+    #             count += 1
+    #             print(
+    #                 '\n\nFirst Name: ' + row['first_name'] + '\n'
+    #                 'Last Name: ' + row['last_name'] + '\n'
+    #                 'Task: ' + row['task_name'] + '\n'
+    #                 'Duration: ' + row['time_spent'] + '\n'
+    #                 'Notes: ' + row['notes'] + '\n'
+    #                 'Date: ' + row['date'] + '\n'
+    #                 )
+    #             print('_' * 50)
+    #     if count == 0:
+    #         print('No results found')
+    #     if input('\n\nSearch again? Y/n').lower() == 'y':
+    #         Search()
 
     def print_task(self, num):
         count = 0

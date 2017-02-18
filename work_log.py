@@ -40,7 +40,7 @@ def menu():
         if index == 0:
             index = len(my_tasks) - 1
         else:
-            index -= 1  # Will need an index error exception
+            index -= 1
     elif ask == 'n':
         if index == len(my_tasks) - 1:
             index = 0
