@@ -7,7 +7,6 @@ class Search:
 
     def __init__(self):
         self.row_num = 0
-        self.task_num = int(time.time())
         self.print_task(self.row_num)
         self.menu()
 
@@ -70,5 +69,4 @@ class Search:
         pass
 
     def edit_task(self):
-        self.delete_task()
-        Task()  # Need to build a Task class
+        pass
