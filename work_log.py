@@ -1,9 +1,8 @@
 import csv
 from datetime import datetime as dt
-import time
 import sys
 
-# Must format all inputs --> date task name, duration, etc.
+# Global vars and lists
 
 fieldnames = [
             'first_name',
@@ -18,7 +17,7 @@ index = 0
 fmt = ('%m-%d-%y')
 
 
-def delete_task():
+def delete_task():  # Deletes task based on global index function
     global index
     if input('Are you sure you want to delete this task? Y/N').lower() == 'y':
         del my_tasks[index]
@@ -27,7 +26,7 @@ def delete_task():
         pass
 
 
-def edit():
+def edit():  # Edits the "current" task according to global index var
     global index
     print('What aspect of the task would you like to change? ')
     item = input(
@@ -48,7 +47,7 @@ def edit():
     my_tasks[index][aspect] = input('Enter your changes: ')
 
 
-def menu():
+def menu():  # Massive menu function...
     global index
     print('Key: '
           '[S]earch, '
@@ -88,7 +87,7 @@ def menu():
         menu()
 
 
-def new_task():
+def new_task():  # Creates new task... will be written to csvfile thru quit()
     first_name = input("What is your first name? ")
     last_name = input("What is your last name? ")
     task_name = input('What is the task name? ')
@@ -110,7 +109,7 @@ def new_task():
     return my_dict
 
 
-def print_task():
+def print_task():  # Prints "current" task based on global index variable
     print(
         '\nTask Number: ' + str(index + 1) + '\n'
         'First Name: ' + my_tasks[index]['first_name'] + '\n'
@@ -123,7 +122,7 @@ def print_task():
     print('_' * 50)
 
 
-def quit():
+def quit():  # Quit function that writes the list of tasks(dicts) to csvfile
     csvfile = open("work_log.csv", 'w')
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
@@ -133,7 +132,7 @@ def quit():
     sys.exit()
 
 
-def search_menu():
+def search_menu():  # Menue for search functionality
     menu_select = input('Search by [D]ate, Date [R]ange,'
                         ' or by [T]ask name? ').lower()
     if menu_select == 'd':
@@ -144,7 +143,7 @@ def search_menu():
         search('task_name')
 
 
-def search(fieldname):
+def search(fieldname):  # search based on date or task (positional argument)
     global index
     search = input('What {} would you like to search?'.format(fieldname))
     for task in my_tasks:
@@ -154,7 +153,7 @@ def search(fieldname):
     menu()
 
 
-def search_range():
+def search_range():  # Search based on date ranges
     global index
     date1 = dt.strptime(input('From: '), fmt)
     date2 = dt.strptime(input('To: '), fmt)
@@ -185,16 +184,11 @@ def wtf(task):  # wtf = write to file
     writer.writerow(task)
     csvfile.close()
 
-
+# Start Program
 print('Welcome to...\n\nTASK LOG 3000!!!!!\n\n')
 sf()
-index = 0
 
+# Program Loop
 while True:
     print_task()
     menu()
-
-
-# create regex search
-
-# Entries can be searched for and found based on a date range
