@@ -20,10 +20,14 @@ fmt = ('%m-%d-%y')
 def delete_task():  # Deletes task based on global index function
     global index
     if input('Are you sure you want to delete this task? Y/N').lower() == 'y':
-        del my_tasks[index]
-        index -= 1
-    else:
-        pass
+        if index == 0:
+            try:
+                del my_tasks[index]
+            except IndexError:
+                print_task()
+        else:
+            del my_tasks[index]
+            index -= 1
 
 
 def edit():  # Edits the "current" task according to global index var
@@ -49,6 +53,7 @@ def edit():  # Edits the "current" task according to global index var
 
 def menu():  # Massive menu function...
     global index
+    print('NOTE: All Dates should be in MM-DD-YY format.')
     print('Key: '
           '[S]earch, '
           '[E]dit, '
@@ -56,10 +61,11 @@ def menu():  # Massive menu function...
           'new [T]ask, '
           '[P]revious, '
           '[N]ext, '
+          '[L]ist all tasks, '
           'or [Q]uit\n'
           )
     print('_' * 50)
-    ask = input('Would you like to do? '.lower())
+    ask = input('Would you like to do? ').lower()
     if ask == 's':
         search = search_menu()
     elif ask == 'e':
@@ -69,6 +75,7 @@ def menu():  # Massive menu function...
     elif ask == 't':
         my_tasks.append(new_task())
         wtf(my_tasks[-1])
+        index = -1
     elif ask == 'p':
         if index == 0:
             index = len(my_tasks) - 1
@@ -79,6 +86,8 @@ def menu():  # Massive menu function...
             index = 0
         else:
             index += 1
+    elif ask == 'l':
+        print_all()
     elif ask == 'q':
         print('Thank you for using Task Log 3000!')
         quit()
@@ -110,16 +119,31 @@ def new_task():  # Creates new task... will be written to csvfile thru quit()
 
 
 def print_task():  # Prints "current" task based on global index variable
-    print(
-        '\nTask Number: ' + str(index + 1) + '\n'
-        'First Name: ' + my_tasks[index]['first_name'] + '\n'
-        'Last Name: ' + my_tasks[index]['last_name'] + '\n'
-        'Task: ' + my_tasks[index]['task_name'] + '\n'
-        'Duration: ' + my_tasks[index]['time_spent'] + '\n'
-        'Notes: ' + my_tasks[index]['notes'] + '\n'
-        'Date: ' + my_tasks[index]['date'] + '\n'
-        )
-    print('_' * 50)
+    global index
+    try:
+        print(
+            '\nTask Number: ' + str(index + 1) + '\n'
+            'First Name: ' + my_tasks[index]['first_name'] + '\n'
+            'Last Name: ' + my_tasks[index]['last_name'] + '\n'
+            'Task: ' + my_tasks[index]['task_name'] + '\n'
+            'Duration: ' + my_tasks[index]['time_spent'] + '\n'
+            'Notes: ' + my_tasks[index]['notes'] + '\n'
+            'Date: ' + my_tasks[index]['date'] + '\n'
+            )
+        print('_' * 50)
+    except IndexError:
+        print('No existing tasks.')
+        index = 0
+        menu()
+
+
+def print_all():
+    print('\nAll Saved Tasks: ')
+    for index, task in enumerate(my_tasks):
+        print('{}: '.format((index + 1)) + task['task_name'] + ' '
+              '' + task['date'])
+    print('\n')
+    menu()
 
 
 def quit():  # Quit function that writes the list of tasks(dicts) to csvfile
@@ -155,12 +179,16 @@ def search(fieldname):  # search based on date or task (positional argument)
 
 def search_range():  # Search based on date ranges
     global index
+    count = 0
     date1 = dt.strptime(input('From: '), fmt)
     date2 = dt.strptime(input('To: '), fmt)
     for task in my_tasks:
         if date1 <= dt.strptime(task[str('date')], fmt) <= date2:
             index = my_tasks.index(task)
             print_task()
+            count += 1
+    if count == 0:
+        print('No tasks recorder for that date range.')
     menu()
 
 
@@ -185,10 +213,11 @@ def wtf(task):  # wtf = write to file
     csvfile.close()
 
 # Start Program
-print('Welcome to...\n\nTASK LOG 3000!!!!!\n\n')
-sf()
+if __name__ == '__main__':
+    print('Welcome to...\n\nTASK LOG 3000!!!!!\n\n')
+    sf()
 
-# Program Loop
-while True:
-    print_task()
-    menu()
+    # Program Loop
+    while True:
+        print_task()
+        menu()
